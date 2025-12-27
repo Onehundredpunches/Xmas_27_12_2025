@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thiệp Giáng Sinh</title>
+  <style>
+    :root{
+      --sky-1:#eef8ff;
+      --sky-2:#d7efff;
+      --sky-3:#bfe2ff;
+      --ink:#0b2a43;
+      --muted: rgba(11,42,67,.72);
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.56);
+      --border: rgba(255,255,255,.60);
+      --shadow: 0 18px 60px rgba(7,25,45,.18);
+      --r: 22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--ink);
+      background:
+        radial-gradient(1000px 700px at 15% 10%, rgba(255,255,255,.75), transparent 55%),
+        radial-gradient(900px 650px at 85% 15%, rgba(255,255,255,.65), transparent 60%),
+        linear-gradient(180deg, var(--sky-1), var(--sky-2) 45%, var(--sky-3));
+      overflow-x:hidden;
+    }
+
+    /* light vignette */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background: radial-gradient(circle at 50% 35%, transparent 45%, rgba(0,0,0,.09));
+      opacity:.28;
+      z-index:0;
+    }
+
+    /* floating bokeh */
+    .bokeh{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+      opacity:.28;
+      background:
+        radial-gradient(120px 120px at 15% 75%, rgba(255,255,255,.9), transparent 65%),
+        radial-gradient(90px 90px at 80% 65%, rgba(255,255,255,.85), transparent 65%),
+        radial-gradient(140px 140px at 55% 15%, rgba(255,255,255,.75), transparent 65%),
+        radial-gradient(70px 70px at 35% 45%, rgba(255,255,255,.8), transparent 65%);
+      filter: blur(0.5px);
+    }
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .card{
+      width:min(1040px, 100%);
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+
+    .top{
+      padding: 24px 24px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,.62);
+      border:1px solid rgba(255,255,255,.65);
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(124,199,255,.95) 55%, rgba(42,142,234,.95));
+      box-shadow: 0 0 0 4px rgba(124,199,255,.18);
+    }
+
+    .hero{
+      padding: 8px 24px 22px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.60);
+      background: rgba(255,255,255,.48);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .left{
+      padding: 18px 18px 16px;
+    }
+
+    h1{
+      margin: 6px 0 10px;
+      font-size: clamp(26px, 4.1vw, 46px);
+      line-height: 1.04;
+      letter-spacing: -0.7px;
+    }
+    .sub{
+      margin:0 0 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: clamp(14px, 2.2vw, 16px);
+      max-width: 62ch;
+    }
+
+    .message{
+      margin-top: 10px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.65);
+      background: rgba(255,255,255,.60);
+    }
+    .message p{
+      margin:0;
+      line-height: 1.85;
+      font-size: 15.5px;
+    }
+    .message p + p{ margin-top: 10px; }
+    .sig{
+      margin-top: 14px;
+      font-weight: 800;
+    }
+
+    /* photo column */
+    .right{
+      display:grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+    }
+    .photo{
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.65);
+      background: rgba(255,255,255,.55);
+      position:relative;
+      min-height: 210px;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit: cover;
+      transform: scale(1.02);
+      filter: saturate(1.05) contrast(1.03);
+    }
+    .tag{
+      position:absolute;
+      left:12px; bottom:12px;
+      padding:8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      background: rgba(255,255,255,.70);
+      border: 1px solid rgba(255,255,255,.65);
+      backdrop-filter: blur(8px);
+    }
+
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.86), transparent);
+      margin: 0 18px;
+    }
+
+    footer{
+      padding: 14px 18px 18px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      color: rgba(11,42,67,.72);
+      font-size: 13px;
+    }
+
+    /* Snow */
+    .snow{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:3; /* on top of card */
+      overflow:hidden;
+    }
+    .flake{
+      position:absolute;
+      top:-20px;
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 10px 18px rgba(7,25,45,.22);
+      user-select:none;
+      will-change: transform;
+      animation-name: fall, drift;
+      animation-timing-function: linear, ease-in-out;
+      animation-iteration-count: infinite, infinite;
+    }
+    @keyframes fall{
+      to{ transform: translateY(calc(100vh + 40px)); }
+    }
+    @keyframes drift{
+      0%{ margin-left: 0px; }
+      50%{ margin-left: 26px; }
+      100%{ margin-left: 0px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bokeh" aria-hidden="true"></div>
+  <div class="snow" id="snow" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <main class="card" aria-label="Thiệp Giáng Sinh">
+      <div class="top">
+        <div class="pill"><span class="dot" aria-hidden="true"></span> ❄️ Merry Christmas</div>
+        <div class="pill" id="dateText">🎄 25/12</div>
+      </div>
+
+      <section class="hero">
+        <div class="panel left">
+          <h1>
+            Gửi <span id="herName">Em</span>,<br/>
+            Noel an lành nhé 💙
+          </h1>
+
+          <p class="sub">
+            (Một vài lời nhắn từ anh Tấn gửi đến cô nương xinh đẹp nhất trần đời !)
+          </p>
+
+          <div class="message">
+            <p>
+              <p>
+  Công chúa ơiiii,<br/>
+  Giáng Sinh này anh chỉ mong em luôn bình an, vui vẻ và ấm áp — dù ngoài kia có lạnh đến đâu.
+  Mong em ăn ngon, ngủ tròn giấc, luôn cười vui, luôn xinh đẹp, luôn suôn sẻ, luôn thành công.
+</p>
+
+<p>
+  Anh cũng mong gia đình em thật nhiều sức khỏe, luôn an yên và gặp nhiều may mắn.
+  Mong mọi điều tốt đẹp nhất sẽ đến với em mùa lễ này và những ngày sắp tới.
+</p>
+
+<p>
+  Chúc em một mùa Noel ngọt ngào, và hy vọng mình sẽ có thật nhiều khoảnh khắc đẹp cùng nhau nữa. 
+  Vạn vật đều không bằng em, nhớ nhó cô nương xinh đẹp! 💙🎄
+</p>
+            </p>
+            <p>
+              ...
+            </p>
+            <div class="sig">
+              — <span id="fromName">Anh</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel right" aria-label="Ảnh kỷ niệm">
+          <div class="photo">
+            <img src="1.jpg" alt="Ảnh 1" />
+            <div class="tag">✨ MT & TL</div>
+          </div>
+          <div class="photo">
+            <img src="2.jpg" alt="Ảnh 2" />
+            <div class="tag">🎁 Cô thiên thần nhỏ</div>
+          </div>
+        </aside>
+      </section>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <footer>
+        <div>Made with 💙 & ❄️</div>
+        <div>Từ <b id="fromName2">Anh</b> — dành cho <b id="toName">Em</b></div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ====== CHỈNH NHANH ======
+    const CONFIG = {
+      herName: "Em",     // đổi tên bạn gái
+      fromName: "Anh",   // đổi tên bạn
+      img1: "1.jpg",     // đổi nếu là png: "1.png"
+      img2: "2.jpg"
+    };
+
+    // Apply config
+    document.getElementById("herName").textContent = CONFIG.herName;
+    document.getElementById("toName").textContent = CONFIG.herName;
+    document.getElementById("fromName").textContent = CONFIG.fromName;
+    document.getElementById("fromName2").textContent = CONFIG.fromName;
+
+    const imgs = document.querySelectorAll("img");
+    if (imgs[0]) imgs[0].src = CONFIG.img1;
+    if (imgs[1]) imgs[1].src = CONFIG.img2;
+
+    // Date
+    const now = new Date();
+    const fmt = new Intl.DateTimeFormat("vi-VN", { day:"2-digit", month:"2-digit", year:"numeric" });
+    document.getElementById("dateText").textContent = "🎄 " + fmt.format(now);
+
+    // ====== Snow (auto-run, no buttons) ======
+    const snow = document.getElementById("snow");
+    const SNOW_COUNT = 38;
+    const snowChars = ["❄", "✻", "✼", "❅"];
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    for (let i = 0; i < SNOW_COUNT; i++) {
+      const f = document.createElement("div");
+      f.className = "flake";
+      f.textContent = snowChars[Math.floor(Math.random() * snowChars.length)];
+
+      const size = rand(10, 22);
+      f.style.fontSize = size + "px";
+      f.style.left = rand(0, 100) + "vw";
+      f.style.opacity = rand(0.35, 0.95);
+
+      const fallDuration = rand(8, 16);
+      const driftDuration = rand(2.3, 4.6);
+      f.style.animationDuration = `${fallDuration}s, ${driftDuration}s`;
+      f.style.animationDelay = `${rand(0, 8)}s, ${rand(0, 2)}s`;
+
+      snow.appendChild(f);
+    }
+  </script>
+</body>
+</html>
